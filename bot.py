@@ -243,13 +243,18 @@ async def on_link(message: Message) -> None:
             or "login required" in err.lower()
             or "rate-limit" in err.lower()
         )
-        if needs_login and not COOKIES_BROWSER:
+        if needs_login and not (COOKIES_FILE or COOKIES_BROWSER):
             text += (
-                f"\n\n{source} требует авторизацию. Пропиши в .env "
+                f"\n\n{source} требует авторизацию. Варианты:\n"
+                "• <b>На сервере</b> — экспортируй <code>cookies.txt</code> "
+                "из браузера (расширение \"Get cookies.txt LOCALLY\"), залей "
+                "рядом с ботом и пропиши в .env "
+                "<code>COOKIES_FILE=cookies.txt</code>.\n"
+                "• <b>На своей машине</b> — пропиши "
                 "<code>COOKIES_BROWSER=chrome</code> "
-                "(или edge / firefox / brave) и перезапусти бота — "
-                "yt-dlp возьмёт куки из браузера. Браузер должен быть "
-                f"залогинен в {source}."
+                "(или edge / firefox / brave / vivaldi); браузер должен быть "
+                f"залогинен в {source}.\n"
+                "После — перезапустить бота."
             )
         await status.edit_text(text)
 
