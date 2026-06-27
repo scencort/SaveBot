@@ -1,0 +1,17 @@
+[Unit]
+Description=SaveBot - TikTok/YouTube Shorts/Instagram Reels downloader Telegram bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/SaveBot
+ExecStart=/opt/SaveBot/venv/bin/python /opt/SaveBot/bot.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=savebot
+
+[Install]
+WantedBy=multi-user.target
