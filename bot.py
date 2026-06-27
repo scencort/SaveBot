@@ -192,11 +192,23 @@ async def download_via_ytdlp(url: str) -> tuple[bytes, str, str, str | None]:
 @dp.message(CommandStart())
 async def on_start(message: Message) -> None:
     await message.answer(
-        "Привет! Кинь ссылку на видео — пришлю файл без водяного знака.\n\n"
-        "<b>Поддерживается:</b>\n"
-        "• TikTok — <code>tiktok.com</code>, <code>vm.tiktok.com</code>, <code>vt.tiktok.com</code>\n"
-        "• YouTube Shorts — <code>youtube.com/shorts/...</code>, <code>youtu.be/...</code>\n"
-        "• Instagram Reels — <code>instagram.com/reel/...</code> (только публичные)"
+        "<b>Привет!</b> Я сохраняю короткие видео из соцсетей — "
+        "без водяных знаков, рекламы и редиректов на сторонние сайты.\n\n"
+        "<b>Как пользоваться</b>\n"
+        "Просто пришли ссылку на видео. Никаких команд не нужно.\n\n"
+        "<b>Что я понимаю</b>\n"
+        "🎵 <b>TikTok</b> — <code>tiktok.com/@user/video/...</code>, "
+        "<code>vm.tiktok.com/...</code>, <code>vt.tiktok.com/...</code>\n"
+        "▶️ <b>YouTube Shorts</b> и обычные ролики — "
+        "<code>youtube.com/shorts/...</code>, <code>youtu.be/...</code>\n"
+        "📸 <b>Instagram Reels</b> — <code>instagram.com/reel/...</code> "
+        "(публичные)\n\n"
+        "<b>Что важно</b>\n"
+        "• Лимит файла — 50 МБ. Если видео тяжелее, пришлю прямую ссылку.\n"
+        "• Подписи и хэштеги к видео не присылаю — только сам ролик.\n"
+        "• Бот работает на голом энтузиазме, может тупить — кидай ссылку "
+        "ещё раз, обычно помогает.\n\n"
+        "<b>Автор:</b> @scencort"
     )
 
 
