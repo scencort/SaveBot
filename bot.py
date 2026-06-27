@@ -149,7 +149,16 @@ def _ytdlp_download_sync(url: str, proxy: str | None) -> tuple[bytes, str, str, 
         if proxy:
             opts["proxy"] = proxy
         if COOKIES_FILE:
-            opts["cookiefile"] = COOKIES_FILE
+            # yt-dlp ПЕРЕЗАПИСЫВАЕТ cookiefile при выходе (и затирает оригинал
+            # пустым jar'ом, если запрос упал). Копируем в tmp перед запуском —
+            # пусть портит копию, а наш cookies.txt остаётся как был.
+            src = os.path.abspath(COOKIES_FILE)
+            if os.path.exists(src) and os.path.getsize(src) > 0:
+                tmp_cookies = os.path.join(tmpdir, "cookies.txt")
+                shutil.copyfile(src, tmp_cookies)
+                opts["cookiefile"] = tmp_cookies
+            else:
+                opts["cookiefile"] = src  # пусть yt-dlp сам ругнётся внятно
         elif COOKIES_BROWSER:
             opts["cookiesfrombrowser"] = (COOKIES_BROWSER,)
 
