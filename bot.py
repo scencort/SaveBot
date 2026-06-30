@@ -247,7 +247,7 @@ async def on_link(message: Message) -> None:
             kwargs = {}
             if fallback_url:
                 href = html.escape(fallback_url, quote=True)
-                msg += f'\nСкачать напрямую: <a href="{href}">тык</a>'
+                msg += f'\nСкачать напрямую: <a href="{href}">ссылка</a>'
                 # CDN-ссылки с кучей query-параметров не дают вменяемого превью,
                 # поэтому глушим его, чтобы Telegram не пытался что-то отрисовать
                 kwargs["link_preview_options"] = LinkPreviewOptions(is_disabled=True)
