@@ -1,4 +1,5 @@
 import asyncio
+import html
 import logging
 import os
 import re
@@ -13,7 +14,7 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram.enums import ParseMode, ChatAction
 from aiogram.filters import CommandStart
-from aiogram.types import BufferedInputFile, Message
+from aiogram.types import BufferedInputFile, LinkPreviewOptions, Message
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -241,13 +242,16 @@ async def on_link(message: Message) -> None:
         video_bytes, title, author, fallback_url = await downloader(url)
 
         if len(video_bytes) > MAX_TELEGRAM_UPLOAD:
-            msg = (
-                f"Видео слишком большое для отправки "
-                f"({len(video_bytes) // 1024 // 1024} МБ, лимит 50 МБ)."
-            )
+            size_mb = len(video_bytes) // 1024 // 1024
+            msg = f"Видео слишком большое для Telegram ({size_mb} МБ, лимит 50 МБ)."
+            kwargs = {}
             if fallback_url:
-                msg += f"\nПрямая ссылка:\n{fallback_url}"
-            await status.edit_text(msg)
+                href = html.escape(fallback_url, quote=True)
+                msg += f'\nСкачать напрямую: <a href="{href}">тык</a>'
+                # CDN-ссылки с кучей query-параметров не дают вменяемого превью,
+                # поэтому глушим его, чтобы Telegram не пытался что-то отрисовать
+                kwargs["link_preview_options"] = LinkPreviewOptions(is_disabled=True)
+            await status.edit_text(msg, **kwargs)
             return
 
         file = BufferedInputFile(video_bytes, filename=filename)
